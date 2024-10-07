@@ -1,0 +1,50 @@
+.headingCss{
+    height: 30px;
+    padding: 2px;
+    background-color: #d3c6ad !important;
+}
+  
+.datatable-orange{
+    color:#000;
+    background-color:#d3c6ad !important;    
+}  
+.underline{      
+    background-color: rgb(4, 4, 4);
+    margin-top: 0%;
+    height: 1px;
+}
+  
+.borderedBoxTC {
+    border: 1px solid black;
+    height: max-content;
+    max-height: max-content;
+    min-height: 100px;
+    padding: 2px;
+    margin: 2px;
+    font-size: 10pt;
+    max-width: 100%;
+}
+td {
+    text-align: left;
+    vertical-align: left;
+}
+.is-total-heading{
+    color: white !important;
+    background-color: #366092 !important;
+}
+.text-left-align{
+    text-align:left;
+}
+.table-col{
+    width:200px; 
+    /* overflow-wrap:break-word; */
+}
+.slds-border_left{
+    color: #000 !important;
+}
+.slds-border_right{
+    color: #000 !important;
+}
+.labelStyle{
+    font-size: large;
+}

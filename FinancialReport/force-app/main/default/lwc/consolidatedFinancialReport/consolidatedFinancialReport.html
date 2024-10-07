@@ -1,0 +1,307 @@
+<template>
+    <!--spinner-->
+    <div if:true={isLoaded}>
+        <lightning-spinner alternative-text="Loading..."></lightning-spinner>
+    </div>
+    <!--Input sheet heading and buttons-->
+    <lightning-layout multiple-rows>
+        <lightning-layout-item size="6" class="slds-m-bottom_small labelStyle">
+            <b>Financial Input Sheet</b>
+        </lightning-layout-item>
+        <lightning-layout-item size="6" class="slds-m-bottom_small slds-text-align_right">
+            <lightning-button title="yoy" label="Select YoY" variant="brand" onclick={handleYoY}></lightning-button>
+        </lightning-layout-item>
+    </lightning-layout>
+    <div class="slds-box">
+        <!--audit table-->
+        <div style="width: 100%;" class="slds-scrollable_x">
+            <lightning-layout>
+                <lightning-layout-item padding="around-small">
+                    <table
+                        class="slds-table slds-table_cell-buffer slds-table_bordered slds-border_left slds-border_right slds-table_col-bordered phone">
+                        <tbody>
+                            <tr>
+                                <td class="datatable-orange slds-is-resizable slds-is-sortable slds-cell_action-mode"
+                                    scope="col" colspan={colspan}>
+                                    <div class="slds-grid slds-grid_vertical-align-center slds-align_absolute-center slds-has-flexi-truncate"
+                                        title=""><b>IS Total</b></div>
+                                </td>
+                            </tr>
+                            <template for:each={financialInfo.auditList} for:item="audit">
+                                <tr key={audit} class={audit.style}>
+                                    <td width="30%">
+                                        <b>{audit.label}</b>
+                                    </td>
+                                    <template for:each={audit.audata} for:item="au">
+                                        <td key={au} width="10%">
+                                            <template if:true={audit.isPicklist}>
+                                                {au.value}
+                                            </template>
+                                            <template if:false={audit.isPicklist}>
+                                                {au}
+                                            </template>
+                                        </td>
+                                    </template>
+                                    <td width="10%"></td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                    <br />
+                    <!--financial input tables from mdt-->
+                    <template for:each={financialInfo.tableList} for:item="table">
+                        <h1 key={table}><b>{table.label}</b></h1>
+                        <table key={table}
+                            class="slds-table slds-table_cell-buffer slds-table_bordered slds-border_left slds-border_right slds-table_col-bordered phone">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="datatable-orange slds-is-resizable slds-is-sortable slds-cell_action-mode"
+                                        scope="col" width="30%">
+                                        <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate"
+                                            title="">
+                                            Particulars
+                                        </div>
+                                        <div class="slds-resizable">
+                                            <input type="range" aria-label="Name column width"
+                                                class="slds-resizable__input slds-assistive-text"
+                                                id="cell-resize-handle-551" max="1000" min="20" tabindex="-1" />
+                                            <span class="slds-resizable__handle">
+                                                <span class="slds-resizable__divider"></span>
+                                            </span>
+                                        </div>
+                                    </th>
+
+                                    <template for:each={table.headerList} for:item="header">
+                                        <th key={header}
+                                            class="datatable-orange slds-is-resizable slds-is-sortable slds-cell_action-mode"
+                                            scope="col" width="10%">
+                                            <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate slds-cell-wrap"
+                                                title="">
+                                                <b>{header.label}</b>
+                                            </div>
+                                            <div class="slds-resizable">
+                                                <input type="range" aria-label="Name column width"
+                                                    class="slds-resizable__input slds-assistive-text"
+                                                    id="cell-resize-handle-552" max="1000" min="20" tabindex="-1" />
+                                                <span class="slds-resizable__handle">
+                                                    <span class="slds-resizable__divider"></span>
+                                                </span>
+                                            </div>
+                                        </th>
+                                    </template>
+
+                                    <th class="datatable-orange slds-is-resizable slds-is-sortable slds-cell_action-mode"
+                                        scope="col" width="10%">
+                                        <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate slds-cell-wrap"
+                                            title="">
+                                            {table.incdeclabel} %
+                                        </div>
+                                        <div class="slds-resizable">
+                                            <input type="range" aria-label="Name column width"
+                                                class="slds-resizable__input slds-assistive-text"
+                                                id="cell-resize-handle-652" max="1000" min="20" tabindex="-1" />
+                                            <span class="slds-resizable__handle">
+                                                <span class="slds-resizable__divider"></span>
+                                            </span>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={table.data} for:item="fs">
+                                    <tr key={fs} class={fs.disclass}>
+                                        <td data-label="Particulars" class="slds-cell-wrap" width="30%">
+                                            <b>{fs.label}</b>
+                                        </td>
+                                        <template for:each={fs.yeardata} for:item="data">
+
+                                            <td key={data} data-label={data.label} width="10%">
+                                                <template if:true={data.value}>
+                                                    <template if:true={fs.display}>
+                                                        &#8377; {data.value}
+                                                    </template>
+                                                    <template if:false={fs.display}>
+                                                        {data.value} %
+                                                    </template>
+                                                </template>
+                                            </td>
+                                        </template>
+                                        <td class="datatable-orange" width="10%">
+                                            {fs.incdec.idvalue}
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                        <br key={table}>
+                    </template>
+                </lightning-layout-item>
+
+                <template for:each={applicantInfo} for:item="applicant">
+                    <lightning-layout-item key={applicant} padding="around-small">
+                        <table
+                            class="slds-table slds-table_cell-buffer slds-table_bordered slds-border_left slds-border_right slds-table_col-bordered phone">
+                            <tbody>
+                                <tr key={audit}>
+                                    <td class="datatable-orange slds-is-resizable slds-is-sortable slds-cell_action-mode"
+                                        scope="col" colspan={colspan}>
+                                        <div class="slds-grid slds-grid_vertical-align-center slds-align_absolute-center slds-has-flexi-truncate"
+                                            title=""><b>{applicant.applicantname}</b></div>
+                                    </td>
+                                </tr>
+
+                                <template for:each={applicant.auditList} for:item="audit">
+                                    <tr key={audit} class={audit.style}>
+                                        <td width="30%">
+                                            <b>{audit.label}</b>
+                                        </td>
+                                        <template for:each={audit.audata} for:item="au">
+                                            <td key={au} width="10%">
+                                                <template if:true={audit.isPicklist}>
+                                                    {au.value}
+                                                </template>
+                                                <template if:false={audit.isPicklist}>
+                                                    {au}
+                                                </template>
+                                            </td>
+                                        </template>
+                                        <td width="10%"></td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                        <br />
+                        <!--financial input tables from mdt-->
+                        <template for:each={applicant.tableList} for:item="table">
+                            <h1 key={table}><b>{table.label}</b></h1>
+                            <table key={table}
+                                class="slds-table slds-table_cell-buffer slds-table_bordered slds-border_left slds-border_right slds-table_col-bordered phone">
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th class="datatable-orange slds-is-resizable slds-is-sortable slds-cell_action-mode"
+                                            scope="col" width="30%">
+                                            <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate"
+                                                title="">
+                                                Particulars
+                                            </div>
+                                            <div class="slds-resizable">
+                                                <input type="range" aria-label="Name column width"
+                                                    class="slds-resizable__input slds-assistive-text"
+                                                    id="cell-resize-handle-751" max="1000" min="20" tabindex="-1" />
+                                                <span class="slds-resizable__handle">
+                                                    <span class="slds-resizable__divider"></span>
+                                                </span>
+                                            </div>
+                                        </th>
+
+                                        <template for:each={table.headerList} for:item="header">
+                                            <th key={header}
+                                                class="datatable-orange slds-is-resizable slds-is-sortable slds-cell_action-mode"
+                                                scope="col" width="10%">
+                                                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate slds-cell-wrap"
+                                                    title="">
+                                                    <b>{header.label}</b>
+                                                </div>
+                                                <div class="slds-resizable">
+                                                    <input type="range" aria-label="Name column width"
+                                                        class="slds-resizable__input slds-assistive-text"
+                                                        id="cell-resize-handle-752" max="1000" min="20" tabindex="-1" />
+                                                    <span class="slds-resizable__handle">
+                                                        <span class="slds-resizable__divider"></span>
+                                                    </span>
+                                                </div>
+                                            </th>
+                                        </template>
+
+                                        <th class="datatable-orange slds-is-resizable slds-is-sortable slds-cell_action-mode"
+                                            scope="col" width="10%">
+                                            <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate slds-cell-wrap"
+                                                title="">
+                                                {table.incdeclabel} %
+                                            </div>
+                                            <div class="slds-resizable">
+                                                <input type="range" aria-label="Name column width"
+                                                    class="slds-resizable__input slds-assistive-text"
+                                                    id="cell-resize-handle-852" max="1000" min="20" tabindex="-1" />
+                                                <span class="slds-resizable__handle">
+                                                    <span class="slds-resizable__divider"></span>
+                                                </span>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={table.data} for:item="fs">
+                                        <tr key={fs} class={fs.disclass}>
+                                            <td data-label="Particulars" class="slds-cell-wrap" width="30%">
+                                                <b>{fs.label}</b>
+                                            </td>
+                                            <template for:each={fs.yeardata} for:item="data">
+                                                <td key={data} data-label={data.label} width="10%">
+                                                    <template if:true={data.value}>
+                                                        <template if:true={fs.display}>
+                                                            &#8377; {data.value}
+                                                        </template>
+                                                        <template if:false={fs.display}>
+                                                            {data.value} %
+                                                        </template>
+                                                    </template>
+                                                </td>
+                                            </template>
+                                            <td class="datatable-orange" width="10%">
+                                                {fs.incdec.idvalue}
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                            <br key={table}>
+                        </template>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+        </div>
+
+    </div>
+    <template if:true={isYoY}>
+        <!-- Modal/Popup Box LWC starts here -->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Modal/Popup Box LWC header here -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                            size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Select Years to calculate
+                        YoY
+                        %</h2>
+                </header>
+                <!-- Modal/Popup Box LWC body starts here -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning-layout multiple-rows>
+                        <lightning-layout-item size="4" class="slds-p-around_medium labelStyle">
+                            <lightning-combobox name="inc" label="Select First Year" value={incValue}
+                                placeholder="Select Year" options={firstYearOptions} onchange={yoyChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="4" class="slds-p-around_medium labelStyle">
+                            <lightning-combobox name="dec" label="Select Secondary Year" value={decValue}
+                                placeholder="Select Year" options={secondYearOptions} onchange={yoyChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>
+                <!-- Modal/Popup Box LWC footer starts here -->
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={closeModal} title="Cancel">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick={submitDetails} title="OK">OK</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>
