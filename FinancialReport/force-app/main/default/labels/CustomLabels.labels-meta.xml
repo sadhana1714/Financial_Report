@@ -7,4 +7,18 @@
         <shortDescription>Years_Financial_Report</shortDescription>
         <value>2</value>
     </labels>
+    <labels>
+        <fullName>Financial_Report_Child_Object</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Financial_Report_Child_Object</shortDescription>
+        <value>Applicant__c</value>
+    </labels>
+    <labels>
+        <fullName>Financial_Report_Parent_Child_Relation</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Financial_Report_Parent_Child_Relation</shortDescription>
+        <value>Loan__c</value>
+    </labels>
 </CustomLabels>

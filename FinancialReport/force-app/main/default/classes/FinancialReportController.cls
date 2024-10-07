@@ -82,9 +82,14 @@ public class FinancialReportController {
         Set<Id> applicantIds = new Set<Id>();
         Map<String,ContentDocumentLink> fsDocMap = new Map<String,ContentDocumentLink>();
         Map<String,String> jsonMap = new Map<String,String>();
+        List<SObject> childObjectList = new  List<SObject>();
         try {
-            for(Applicant__c app : [Select Id FROM Applicant__c WHERE Loan__c =:parentId]){
-                applicantIds.add(app.id);
+            String childObjectAPI = System.label.Financial_Report_Child_Object;
+            String parentChildRelationAPI = System.label.Financial_Report_Parent_Child_Relation ;
+            String query = 'SELECT ID FROM '+childObjectAPI+' WHERE '+parentChildRelationAPI+'=:parentId';
+            childObjectList = Database.query(query);
+            for(SObject obj : childObjectList){
+                applicantIds.add(obj.id);
             }
             for(ContentDocumentLink cv : [SELECT Id,LinkedEntityId,LinkedEntity.Name,ContentDocumentId, ContentDocument.LatestPublishedVersion.VersionData FROM 
                                           ContentDocumentLink WHERE LinkedEntityId in :applicantIds and ContentDocument.Title = 'Financial Details'
